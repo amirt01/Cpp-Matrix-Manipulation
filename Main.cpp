@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Matrix.hpp"
+#include "Func.hpp"
 
 int main() {
   Matrix<double> mat{{1, 2, 3},
@@ -12,13 +13,10 @@ int main() {
   std::cout << mat;
 
   std::cout << '\n';
-  mat.transpose();
 
-  std::cout << mat;
+  std::cout << transpose(mat);
 
-
-  std::cout << '\n';
-  mat.resize(3, 4, 5);
+  std::cout << 'n';
 
   std::cout << mat;
 

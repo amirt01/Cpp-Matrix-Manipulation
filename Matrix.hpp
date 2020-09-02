@@ -13,8 +13,9 @@ template<class T>
 class Matrix {
  private:
   std::vector<std::vector<T>> m_matrix;
-  unsigned m_rows = 0;
-  unsigned m_cols = 0;
+  unsigned m_rows{};
+  unsigned m_cols{};
+
  public:
   Matrix() = default;
 
@@ -25,6 +26,8 @@ class Matrix {
   Matrix(const std::initializer_list<std::vector<T>>& il);
 
   Matrix(const Matrix<T>& rhs);
+
+  Matrix(Matrix<T>&& rhs) noexcept;
 
   void resize(const unsigned& rows, const unsigned& cols, const T& initial = T{});
 
@@ -120,6 +123,11 @@ Matrix<T>::Matrix(const std::initializer_list<std::vector<T>>& il)
 template<class T>
 Matrix<T>::Matrix(const Matrix<T>& rhs)
   : m_matrix(rhs.m_matrix), m_rows(rhs.m_rows), m_cols(rhs.m_cols) {}
+
+// Move Constructor
+template<class T>
+Matrix<T>::Matrix(Matrix<T>&& rhs) noexcept
+  : m_matrix(std::move(rhs.m_matrix)), m_rows(std::move(rhs.m_rows)), m_cols(std::move(rhs.m_cols)) {}
 
 template<class T>
 void Matrix<T>::resize(const unsigned int& rows, const unsigned int& cols, const T& initial) {
@@ -279,13 +287,13 @@ void Matrix<T>::transpose() {
       }
     }
   } else {  // matrix isn't square
-    Matrix<T> trans(m_cols, m_rows);
+    Matrix<T> result(m_cols, m_rows);
     for (unsigned i = 0; i < m_rows; i++) {
       for (unsigned j = 0; j < m_cols; j++) {
-        trans(j, i) = m_matrix[i][j];
+        result(j, i) = m_matrix[i][j];
       }
     }
-    *this = trans;
+    *this = result;
   }
 }
 
