@@ -268,7 +268,7 @@ Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& rhs) {
   return *this;
 }
 
-// Transpose this matrix (square)
+// Transpose this matrix
 template<class T>
 void Matrix<T>::transpose() {
   // check if the matrix is square
