@@ -272,14 +272,20 @@ Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& rhs) {
 template<class T>
 void Matrix<T>::transpose() {
   // check if the matrix is square
-  if (m_cols != m_rows) {
-    throw "MATRIX NOT SQUARE";
-  }
-
-  for (unsigned i = 0; i < m_rows; i++) {
-    for (unsigned j = 0; j < i; j++) {
-      std::swap(m_matrix[i][j], m_matrix[j][i]);
+  if (m_cols == m_rows) {
+    for (unsigned i = 0; i < m_rows; i++) {
+      for (unsigned j = 0; j < i; j++) {
+        std::swap(m_matrix[i][j], m_matrix[j][i]);
+      }
     }
+  } else {  // matrix isn't square
+    Matrix<T> trans(m_cols, m_rows);
+    for (unsigned i = 0; i < m_rows; i++) {
+      for (unsigned j = 0; j < m_cols; j++) {
+        trans(j, i) = m_matrix[i][j];
+      }
+    }
+    *this = trans;
   }
 }
 

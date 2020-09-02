@@ -6,9 +6,8 @@
 #include "Matrix.hpp"
 
 int main() {
-  Matrix<double> mat{{1, 3, 4},
-                     {3, 2, 1},
-                     {8, 9, 2}};
+  Matrix<double> mat{{1, 2, 3},
+                     {4, 5, 6}};
 
   std::cout << mat;
 
