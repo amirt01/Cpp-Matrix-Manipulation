@@ -3,10 +3,10 @@
 //
 
 #include <iostream>
-#include "Matrix.hpp"
+#include "matrix.hpp"
 
 int main() {
-  Matrix<double> mat{{1, 2, 3},
+  matrix<double> mat{{1, 2, 3},
                      {4, 5, 6}};
 
   std::cout << "ORIGINAL VARIABLE:\n";

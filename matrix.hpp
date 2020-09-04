@@ -10,67 +10,67 @@
 #include <algorithm>
 
 template<class T>
-class Matrix {
+class matrix {
  private:
   std::vector<std::vector<T>> m_matrix;
   unsigned m_rows{};
   unsigned m_cols{};
 
  public:
-  Matrix() = default;
+  matrix() = default;
 
-  Matrix(const unsigned& rows, const unsigned& cols, const T& initial = T{});
+  matrix(const unsigned& rows, const unsigned& cols, const T& initial = T{});
 
-  explicit Matrix(const std::vector<std::vector<T>>& matrix);
+  explicit matrix(const std::vector<std::vector<T>>& matrix);
 
-  Matrix(const std::initializer_list<std::vector<T>>& il);
+  matrix(const std::initializer_list<std::vector<T>>& il);
 
-  explicit Matrix(const std::vector<T>& matrix);
+  explicit matrix(const std::vector<T>& matrix);
 
-  Matrix(const std::initializer_list<T>& il);
+  matrix(const std::initializer_list<T>& il);
 
-  Matrix(const Matrix<T>& rhs);
+  matrix(const matrix<T>& rhs);
 
-  Matrix(Matrix<T>&& rhs) noexcept;
+  matrix(matrix<T>&& rhs) noexcept;
 
   void resize(const unsigned& rows, const unsigned& cols, const T& initial = T{});
 
   // Operator overloading, for "standard" mathematical matrix operations
-  Matrix<T>& operator=(const Matrix<T>& rhs);
+  matrix<T>& operator=(const matrix<T>& rhs);
 
-  // Matrix mathematical operations
-  Matrix<T> operator+(const Matrix<T>& rhs);
+  // matrix mathematical operations
+  matrix<T> operator+(const matrix<T>& rhs);
 
-  Matrix<T>& operator+=(const Matrix<T>& rhs);
+  matrix<T>& operator+=(const matrix<T>& rhs);
 
-  Matrix<T> operator-(const Matrix<T>& rhs);
+  matrix<T> operator-(const matrix<T>& rhs);
 
-  Matrix<T>& operator-=(const Matrix<T>& rhs);
+  matrix<T>& operator-=(const matrix<T>& rhs);
 
-  Matrix<T> operator*(const Matrix<T>& rhs);
+  matrix<T> operator*(const matrix<T>& rhs);
 
-  Matrix<T>& operator*=(const Matrix<T>& rhs);
+  matrix<T>& operator*=(const matrix<T>& rhs);
 
   void transpose();
 
-  // Matrix/scalar operations
-  Matrix<T> operator+(const T& rhs);
+  // matrix/scalar operations
+  matrix<T> operator+(const T& rhs);
 
-  Matrix<T> operator-(const T& rhs);
+  matrix<T> operator-(const T& rhs);
 
-  Matrix<T> operator*(const T& rhs);
+  matrix<T> operator*(const T& rhs);
 
-  Matrix<T> operator/(const T& rhs);
+  matrix<T> operator/(const T& rhs);
 
-  Matrix<T> operator+=(const T& rhs);
+  matrix<T> operator+=(const T& rhs);
 
-  Matrix<T> operator-=(const T& rhs);
+  matrix<T> operator-=(const T& rhs);
 
-  Matrix<T> operator*=(const T& rhs);
+  matrix<T> operator*=(const T& rhs);
 
-  Matrix<T> operator/=(const T& rhs);
+  matrix<T> operator/=(const T& rhs);
 
-  // Matrix/vector operations
+  // matrix/vector operations
   std::vector<T> operator*(const std::vector<T>& rhs);
 
   std::vector<T> diag_vec();
@@ -86,7 +86,7 @@ class Matrix {
   [[nodiscard]] unsigned get_cols() const;
 
   // Insertion operator overload
-  friend std::ostream& operator<<(std::ostream& os, const Matrix<T> rhs) {
+  friend std::ostream& operator<<(std::ostream& os, const matrix<T> rhs) {
     // print each cell in order
     for (const auto& row : rhs.m_matrix) {
       for (const auto& cell : row) {
@@ -101,54 +101,54 @@ class Matrix {
 
 // Parameter Constructor
 template<class T>
-Matrix<T>::Matrix(const unsigned& rows, const unsigned& cols, const T& initial)
+matrix<T>::matrix(const unsigned& rows, const unsigned& cols, const T& initial)
   : m_rows(rows), m_cols(cols) {
   resize(rows, cols, initial);
 }
 
-// Matrix initializer
+// matrix initializer
 template<class T>
-Matrix<T>::Matrix(const std::vector<std::vector<T>>& matrix)
+matrix<T>::matrix(const std::vector<std::vector<T>>& matrix)
   : m_matrix(matrix), m_rows(matrix.size()), m_cols(matrix[0].size()) {}
 
 // Vector initializer list
 template<class T>
-Matrix<T>::Matrix(const std::initializer_list<std::vector<T>>& il)
+matrix<T>::matrix(const std::initializer_list<std::vector<T>>& il)
   : m_matrix(il), m_rows(il.size()), m_cols(il.begin()->size()) {
   // check to make sure the matrix is all the correct size
   for (const auto& row : m_matrix) {
     if (row.size() != m_cols) {
-      throw "INVALID MATRIX";
+      throw std::invalid_argument("Matrix row lengths do not match!");
     }
   }
 }
 
 // 1D matrix initializer
 template<typename T>
-Matrix<T>::Matrix(const std::vector<T>& matrix)
+matrix<T>::matrix(const std::vector<T>& matrix)
   : m_rows(1), m_cols(matrix.size()) {
   m_matrix.push_back(matrix);
 }
 
 // 1D initializer list
 template<typename T>
-Matrix<T>::Matrix(const std::initializer_list<T>& il)
+matrix<T>::matrix(const std::initializer_list<T>& il)
   : m_rows(1), m_cols(il.size()) {
   m_matrix.push_back(il);
 }
 
 // Copy Constructor
 template<class T>
-Matrix<T>::Matrix(const Matrix<T>& rhs)
+matrix<T>::matrix(const matrix<T>& rhs)
   : m_matrix(rhs.m_matrix), m_rows(rhs.m_rows), m_cols(rhs.m_cols) {}
 
 // Move Constructor
 template<class T>
-Matrix<T>::Matrix(Matrix<T>&& rhs) noexcept
+matrix<T>::matrix(matrix<T>&& rhs) noexcept
   : m_matrix(std::move(rhs.m_matrix)), m_rows(std::move(rhs.m_rows)), m_cols(std::move(rhs.m_cols)) {}
 
 template<class T>
-void Matrix<T>::resize(const unsigned int& rows, const unsigned int& cols, const T& initial) {
+void matrix<T>::resize(const unsigned int& rows, const unsigned int& cols, const T& initial) {
   // resize the number of rows in the matrix
   m_matrix.resize(rows);
   // resize the number of columns in the matrix
@@ -159,7 +159,7 @@ void Matrix<T>::resize(const unsigned int& rows, const unsigned int& cols, const
 
 // Assignment Operator
 template<class T>
-Matrix<T>& Matrix<T>::operator=(const Matrix<T>& rhs) {
+matrix<T>& matrix<T>::operator=(const matrix<T>& rhs) {
   // check if the matrices are already equal
   if (&rhs == this)
     return *this;
@@ -176,16 +176,16 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& rhs) {
 
 // Addition of two matrices
 template<class T>
-Matrix<T> Matrix<T>::operator+(const Matrix<T>& rhs) {
+matrix<T> matrix<T>::operator+(const matrix<T>& rhs) {
   // test if matrices are the same size
   if (rhs.m_rows != m_rows) {
-    throw "MISMATCHING NUMBER OF ROWS";
+    throw std::invalid_argument("Mismatching number of rows!");
   }
   if (rhs.m_cols != m_cols) {
-    throw "MISMATCHING NUMBER OF COLS";
+    throw std::invalid_argument("Mismatching number of columns!");
   }
 
-  Matrix result(m_rows, m_cols);
+  matrix result(m_rows, m_cols);
 
   // add each cell from this matrix and rhs into the resulting matrix
   for (unsigned i = 0; i < m_rows; i++) {
@@ -200,13 +200,13 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T>& rhs) {
 
 // Cumulative addition of this matrix and another
 template<class T>
-Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& rhs) {
+matrix<T>& matrix<T>::operator+=(const matrix<T>& rhs) {
   // test if matrices are the same size
   if (rhs.m_rows != m_rows) {
-    throw "MISMATCHING NUMBER OF ROWS";
+    throw std::invalid_argument("Mismatching number of rows!");
   }
   if (rhs.m_cols != m_cols) {
-    throw "MISMATCHING NUMBER OF COLS";
+    throw std::invalid_argument("Mismatching number of columns");
   }
 
   // add each cell from rhs to matrix
@@ -221,16 +221,16 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& rhs) {
 
 // Subtraction of this matrix and another
 template<class T>
-Matrix<T> Matrix<T>::operator-(const Matrix<T>& rhs) {
+matrix<T> matrix<T>::operator-(const matrix<T>& rhs) {
   // test if matrices are the same size
   if (rhs.m_rows != m_rows) {
-    throw "MISMATCHING NUMBER OF ROWS";
+    throw std::invalid_argument("Mismatching number of rows!");
   }
   if (rhs.m_cols != m_cols) {
-    throw "MISMATCHING NUMBER OF COLS";
+    throw std::invalid_argument("Mismatching number of columns");
   }
 
-  Matrix result(m_rows, m_cols);
+  matrix result(m_rows, m_cols);
 
   // subtract each cell of rhs from this matrix and store in the resulting matrix
   for (unsigned i = 0; i < m_rows; i++) {
@@ -245,13 +245,13 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T>& rhs) {
 
 // Cumulative subtraction of this matrix and another
 template<class T>
-Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& rhs) {
+matrix<T>& matrix<T>::operator-=(const matrix<T>& rhs) {
   // test if matrices are the same size
   if (rhs.m_rows != m_rows) {
-    throw "MISMATCHING NUMBER OF ROWS";
+    throw std::invalid_argument("Mismatching number of rows!");
   }
   if (rhs.m_cols != m_cols) {
-    throw "MISMATCHING NUMBER OF COLS";
+    throw std::invalid_argument("Mismatching number of columns");
   }
 
   // subtract each cell of rhs from matrix
@@ -266,13 +266,13 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& rhs) {
 
 // Left multiplication of this matrix and another
 template<class T>
-Matrix<T> Matrix<T>::operator*(const Matrix<T>& rhs) {
+matrix<T> matrix<T>::operator*(const matrix<T>& rhs) {
   // test if rows of the second matrix is equal to the columns of the other
   if (rhs.m_rows != m_cols) {
-    throw "MISMATCHING SIZE";
+    throw std::invalid_argument("Mismatching matrix size!");
   }
 
-  Matrix result(m_rows, rhs.m_cols);
+  matrix result(m_rows, rhs.m_cols);
 
   for (unsigned i = 0; i < m_rows; i++) {
     for (unsigned j = 0; j < rhs.m_rows; j++) {
@@ -287,15 +287,15 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& rhs) {
 
 // Cumulative left multiplication of this matrix and another
 template<class T>
-Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& rhs) {
-  Matrix result = *this * rhs;
+matrix<T>& matrix<T>::operator*=(const matrix<T>& rhs) {
+  matrix result = *this * rhs;
   *this = result;
   return *this;
 }
 
 // Transpose this matrix
 template<class T>
-void Matrix<T>::transpose() {
+void matrix<T>::transpose() {
   // check if the matrix is square
   if (m_cols == m_rows) {
     for (unsigned i = 0; i < m_rows; i++) {
@@ -304,7 +304,7 @@ void Matrix<T>::transpose() {
       }
     }
   } else {  // matrix isn't square
-    Matrix<T> result(m_cols, m_rows);
+    matrix<T> result(m_cols, m_rows);
     for (unsigned i = 0; i < m_rows; i++) {
       for (unsigned j = 0; j < m_cols; j++) {
         result(j, i) = m_matrix[i][j];
@@ -314,10 +314,10 @@ void Matrix<T>::transpose() {
   }
 }
 
-// Matrix/scalar addition
+// matrix/scalar addition
 template<class T>
-Matrix<T> Matrix<T>::operator+(const T& rhs) {
-  Matrix result(m_rows, m_cols);
+matrix<T> matrix<T>::operator+(const T& rhs) {
+  matrix result(m_rows, m_cols);
 
   // add rhs to each cell in the matrix
   for (unsigned i = 0; i < m_rows; i++) {
@@ -329,10 +329,10 @@ Matrix<T> Matrix<T>::operator+(const T& rhs) {
   return std::move(result);
 }
 
-// Matrix/scalar subtraction
+// matrix/scalar subtraction
 template<class T>
-Matrix<T> Matrix<T>::operator-(const T& rhs) {
-  Matrix result(m_rows, m_cols);
+matrix<T> matrix<T>::operator-(const T& rhs) {
+  matrix result(m_rows, m_cols);
 
   // subtract rhs from each cell in the matrix
   for (unsigned i = 0; i < m_rows; i++) {
@@ -344,10 +344,10 @@ Matrix<T> Matrix<T>::operator-(const T& rhs) {
   return std::move(result);
 }
 
-// Matrix/scalar multiplication
+// matrix/scalar multiplication
 template<typename T>
-Matrix<T> Matrix<T>::operator*(const T& rhs) {
-  Matrix result(m_rows, m_cols);
+matrix<T> matrix<T>::operator*(const T& rhs) {
+  matrix result(m_rows, m_cols);
 
   // multiply each cell in the matrix by rhs
   for (unsigned i = 0; i < m_rows; i++) {
@@ -359,10 +359,10 @@ Matrix<T> Matrix<T>::operator*(const T& rhs) {
   return std::move(result);
 }
 
-// Matrix/scalar division
+// matrix/scalar division
 template<typename T>
-Matrix<T> Matrix<T>::operator/(const T& rhs) {
-  Matrix result(m_rows, m_cols, 0.0);
+matrix<T> matrix<T>::operator/(const T& rhs) {
+  matrix result(m_rows, m_cols, 0.0);
 
   for (unsigned i = 0; i < m_rows; i++) {
     for (unsigned j = 0; j < m_cols; j++) {
@@ -374,7 +374,7 @@ Matrix<T> Matrix<T>::operator/(const T& rhs) {
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator+=(const T& rhs) {
+matrix<T> matrix<T>::operator+=(const T& rhs) {
   for (auto& row : m_matrix) {
     for (auto& cell : row) {
       cell += rhs;
@@ -383,7 +383,7 @@ Matrix<T> Matrix<T>::operator+=(const T& rhs) {
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator-=(const T& rhs) {
+matrix<T> matrix<T>::operator-=(const T& rhs) {
   for (auto& row : m_matrix) {
     for (auto& cell : row) {
       cell -= rhs;
@@ -392,7 +392,7 @@ Matrix<T> Matrix<T>::operator-=(const T& rhs) {
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator*=(const T& rhs) {
+matrix<T> matrix<T>::operator*=(const T& rhs) {
   for (auto& row : m_matrix) {
     for (auto& cell : row) {
       cell *= rhs;
@@ -401,7 +401,7 @@ Matrix<T> Matrix<T>::operator*=(const T& rhs) {
 }
 
 template<class T>
-Matrix<T> Matrix<T>::operator/=(const T& rhs) {
+matrix<T> matrix<T>::operator/=(const T& rhs) {
   for (auto& row : m_matrix) {
     for (auto& cell : row) {
       cell /= rhs;
@@ -411,7 +411,7 @@ Matrix<T> Matrix<T>::operator/=(const T& rhs) {
 
 // Multiply a matrix with a vector
 template<class T>
-std::vector<T> Matrix<T>::operator*(const std::vector<T>& rhs) {
+std::vector<T> matrix<T>::operator*(const std::vector<T>& rhs) {
   std::vector<T> result(rhs.size(), 0.0);
 
   for (unsigned i = 0; i < m_rows; i++) {
@@ -425,7 +425,7 @@ std::vector<T> Matrix<T>::operator*(const std::vector<T>& rhs) {
 
 // Obtain a vector of the diagonal elements
 template<class T>
-std::vector<T> Matrix<T>::diag_vec() {
+std::vector<T> matrix<T>::diag_vec() {
   std::vector<T> result(m_rows, 0.0);
 
   for (unsigned i = 0; i < m_rows; i++) {
@@ -437,33 +437,33 @@ std::vector<T> Matrix<T>::diag_vec() {
 
 // Access the individual elements
 template<class T>
-T& Matrix<T>::operator()(const unsigned int& row, const unsigned int& col) {
+T& matrix<T>::operator()(const unsigned int& row, const unsigned int& col) {
   return m_matrix[row][col];
 }
 
 // Access the individual elements (const)
 template<typename T>
-const T& Matrix<T>::operator()(const unsigned& row, const unsigned& col) const {
+const T& matrix<T>::operator()(const unsigned& row, const unsigned& col) const {
   return m_matrix[row][col];
 }
 
 // Get the number of rows of the matrix
 template<typename T>
-unsigned Matrix<T>::get_rows() const {
+unsigned matrix<T>::get_rows() const {
   return m_rows;
 }
 
 // Get the number of columns of the matrix
 template<typename T>
-unsigned Matrix<T>::get_cols() const {
+unsigned matrix<T>::get_cols() const {
   return m_cols;
 }
 
 
 // transpose the matrix without
 template<typename T>
-Matrix<T> transpose(Matrix<T> rhs) {
-  Matrix<T> result(rhs.get_cols(), rhs.get_rows());
+matrix<T> transpose(matrix<T> rhs) {
+  matrix<T> result(rhs.get_cols(), rhs.get_rows());
   for (unsigned i = 0; i < rhs.get_rows(); i++) {
     for (unsigned j = 0; j < rhs.get_cols(); j++) {
       result(j, i) = rhs(i, j);
