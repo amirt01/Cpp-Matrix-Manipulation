@@ -25,6 +25,10 @@ class Matrix {
 
   Matrix(const std::initializer_list<std::vector<T>>& il);
 
+  explicit Matrix(const std::vector<T>& matrix);
+
+  Matrix(const std::initializer_list<T>& il);
+
   Matrix(const Matrix<T>& rhs);
 
   Matrix(Matrix<T>&& rhs) noexcept;
@@ -117,6 +121,20 @@ Matrix<T>::Matrix(const std::initializer_list<std::vector<T>>& il)
       throw "INVALID MATRIX";
     }
   }
+}
+
+// 1D matrix initializer
+template<typename T>
+Matrix<T>::Matrix(const std::vector<T>& matrix)
+  : m_rows(1), m_cols(matrix.size()) {
+  m_matrix.push_back(matrix);
+}
+
+// 1D initializer list
+template<typename T>
+Matrix<T>::Matrix(const std::initializer_list<T>& il)
+  : m_rows(1), m_cols(il.size()) {
+  m_matrix.push_back(il);
 }
 
 // Copy Constructor
@@ -251,16 +269,15 @@ template<class T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& rhs) {
   // test if rows of the second matrix is equal to the columns of the other
   if (rhs.m_rows != m_cols) {
-    throw "MISMATCHING NUMBER OF ROWS";
+    throw "MISMATCHING SIZE";
   }
 
-  Matrix result(m_rows, m_cols);
+  Matrix result(m_rows, rhs.m_cols);
 
-  // multiply the matrices
   for (unsigned i = 0; i < m_rows; i++) {
-    for (unsigned j = 0; j < m_cols; j++) {
-      for (unsigned k = 0; k < m_rows; k++) {
-        result(i, j) += this->m_matrix[i][k] * rhs(k, j);
+    for (unsigned j = 0; j < rhs.m_rows; j++) {
+      for (unsigned k = 0; k < rhs.m_cols; k++) {
+        result(i, k) += m_matrix[i][j] * rhs(j, k);
       }
     }
   }

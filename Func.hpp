@@ -19,5 +19,4 @@ Matrix<T> transpose(Matrix<T> rhs) {
   return std::move(result);
 }
 
-
 #endif //CPP_MATRIX_MANIPULATION_FUNC_HPP
