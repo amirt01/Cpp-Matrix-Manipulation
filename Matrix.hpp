@@ -459,4 +459,17 @@ unsigned Matrix<T>::get_cols() const {
   return m_cols;
 }
 
+
+// transpose the matrix without
+template<typename T>
+Matrix<T> transpose(Matrix<T> rhs) {
+  Matrix<T> result(rhs.get_cols(), rhs.get_rows());
+  for (unsigned i = 0; i < rhs.get_rows(); i++) {
+    for (unsigned j = 0; j < rhs.get_cols(); j++) {
+      result(j, i) = rhs(i, j);
+    }
+  }
+  return std::move(result);
+}
+
 #endif //CPP_MATRIX_MANIPULATION_MATRIX_HPP
